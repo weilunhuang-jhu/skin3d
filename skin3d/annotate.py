@@ -12,13 +12,14 @@ def lesion_properties_from_annotations(
     """Load specific properties from the annotations."""
 
     properties = []
-    for region_attributes, coords in zip(
-            df.region_attributes, df.region_shape_attributes):
+    for region_attributes, region_id, coords in zip(
+            df.region_attributes, df.region_id, df.region_shape_attributes):
         coords = json.loads(coords)
         x = coords['x']
         y = coords['y']
         w = coords['width']
         h = coords['height']
+        region_id = int(region_id)
 
         # Some annotations had `undefined` values,
         # which JSON does not parse well without quotes.
@@ -46,6 +47,7 @@ def lesion_properties_from_annotations(
                 'width': w, 'height': h,
                 'annotator': annotator,
                 'lesion_id': lesion_id,
+                'region_id': region_id,
             }
         )
 
